@@ -1,10 +1,8 @@
 from flask_restx import Namespace, Resource, reqparse, fields
 from ..models.orders import Order
-from ..models.customers import Customer
 from flask import request, jsonify
 from http import HTTPStatus
 from ..utils import db
-import json
 
 order_namespace = Namespace('Order', description="Order-related APIs")
 
@@ -77,7 +75,7 @@ class OrderGetByCustomerID(Resource):
         customer_id = request.args.get('customer_id')
 
         if (customer_id is None):
-            orders = Order.get_all()
+            orders = Order.query.order_by(Order.id.asc()).all()
             return orders, HTTPStatus.OK
         else:
             orders = Order.query.filter_by(customer_id=customer_id).all()
@@ -96,7 +94,6 @@ class OrderGetByCustomerID(Resource):
             item_name = data['item_name'],
             item_price = data['item_price'],
             customer_id = data['customer_id']
-
         )
 
         new_order.save()

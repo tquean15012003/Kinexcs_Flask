@@ -29,7 +29,7 @@ class CustomerGet(Resource):
         number = request.args.get('number')
 
         if (number is None):
-            customers = Customer.get_all()
+            customers = Customer.query.order_by(Customer.id.asc()).all()
             return customers, HTTPStatus.OK
         else:
             customers = Customer.query.order_by(Customer.dob.desc()).limit(number).all()

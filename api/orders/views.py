@@ -12,7 +12,7 @@ order_model = order_namespace.model(
         'item_name':fields.String(description="Item name", required=True),
         'item_price':fields.Float(description="Item price", required=True),
         'customer_id':fields.Integer(description="Customer ID", required=True),
-        'created_at':fields.DateTime(description="Created at", required=True),
+        'created_at':fields.DateTime(description="Created at")
     }
 )
 

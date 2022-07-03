@@ -8,7 +8,7 @@ from .utils import db
 from .models.orders import Order
 from .models.customers import Customer
 from flask_migrate import Migrate
- 
+from werkzeug.exceptions import NotFound, MethodNotAllowed, InternalServerError
 
 def create_app(config=config_dict['dev']):
     app=Flask(__name__)
@@ -23,6 +23,18 @@ def create_app(config=config_dict['dev']):
     
     api.add_namespace(order_namespace, path='/orders')
     api.add_namespace(customer_namespace, path='/customers')
+
+    @api.errorhandler(NotFound)
+    def not_found(error):
+        return {"error": "Not found"}, 404
+
+    @api.errorhandler(MethodNotAllowed)
+    def method_not_allowed(error):
+        return {"error": "Method not allowed"}, 405
+
+    @api.errorhandler(InternalServerError)
+    def internal_server_error(error):
+        return {"error": "Internal Server Error"}, 500
 
     @app.shell_context_processor
     def make_shell_context():
